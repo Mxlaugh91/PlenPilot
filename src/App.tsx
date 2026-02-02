@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AdminDashboard } from "./features/admin/AdminDashboard";
 import { EmployeeDashboard } from "./features/employee/EmployeeDashboard";
+import { InstallPrompt } from "./components/ui/InstallPrompt";
 
 // Temporary role selector for testing
 type Role = "admin" | "employee";
@@ -11,6 +12,8 @@ export default function App() {
 
   return (
     <>
+      <InstallPrompt />
+      
       {/* Dev-helper to switch roles (remove in production) */}
       <div className="fixed bottom-4 right-4 z-[100] flex gap-2 rounded-full bg-white/90 p-1 shadow-lg backdrop-blur-sm border border-slate-200">
         <button 
