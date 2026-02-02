@@ -161,7 +161,7 @@ export function LoginPage() {
             type="email"
             placeholder="din@epost.no"
             value={email}
-            onChange={setEmail}
+            onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
             autoComplete="email"
             required
@@ -173,7 +173,7 @@ export function LoginPage() {
             type="password"
             placeholder="••••••••"
             value={password}
-            onChange={setPassword}
+            onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
             autoComplete="current-password"
             required

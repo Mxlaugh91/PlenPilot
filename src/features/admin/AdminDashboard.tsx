@@ -5,6 +5,7 @@ import '../../App.css';
 import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
+import { NewLocationModal } from "./components/NewLocationModal";
 
 // Import Auth
 import { useAuth } from "../auth";
@@ -445,37 +446,10 @@ export function AdminDashboard() {
       </nav>
 
       {/* MODAL OVERLAY */}
-      {showNewSted && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 p-6 backdrop-blur-sm animate-in fade-in duration-200">
-          <Card className="w-full max-w-lg p-8 shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-2xl font-bold">Nytt oppdragssted</h3>
-              <button onClick={() => setShowNewSted(false)} className="text-slate-400 hover:text-slate-600 text-3xl font-light">×</button>
-            </div>
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Navn på sted</label>
-                <input className="w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 font-medium outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all" placeholder="F.eks. Frognerparken" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Adresse</label>
-                <input className="w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 font-medium outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all" placeholder="Kirkeveien 21..." />
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-1 space-y-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Type</label>
-                  <input className="w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 font-medium outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all" placeholder="Park" />
-                </div>
-                <div className="flex-1 space-y-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Start-uke</label>
-                  <input className="w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 font-medium outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all" type="number" placeholder="14" />
-                </div>
-              </div>
-              <Button onClick={() => setShowNewSted(false)} className="w-full py-4 text-lg">Lagre lokasjon</Button>
-            </div>
-          </Card>
-        </div>
-      )}
+      <NewLocationModal 
+        isOpen={showNewSted} 
+        onClose={() => setShowNewSted(false)} 
+      />
     </div>
   );
 }
