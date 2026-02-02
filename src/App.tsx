@@ -1,36 +1,57 @@
-import { useState } from "react";
+import { AuthProvider, useAuth } from "./features/auth";
+import { LoginPage } from "./features/auth/LoginPage";
 import { AdminDashboard } from "./features/admin/AdminDashboard";
 import { EmployeeDashboard } from "./features/employee/EmployeeDashboard";
 import { InstallPrompt } from "./components/ui/InstallPrompt";
+import { LoadingScreen } from "./components/ui/LoadingScreen";
 
-// Temporary role selector for testing
-type Role = "admin" | "employee";
-
+/**
+ * App Component
+ *
+ * Root component that wraps the entire application with AuthProvider.
+ * Manages authentication state and conditional rendering based on user role.
+ */
 export default function App() {
-  // In a real app, this would come from an auth context or API
-  const [userRole, setUserRole] = useState<Role>("admin");
-
   return (
-    <>
+    <AuthProvider>
       <InstallPrompt />
-      
-      {/* Dev-helper to switch roles (remove in production) */}
-      <div className="fixed bottom-4 right-4 z-[100] flex gap-2 rounded-full bg-white/90 p-1 shadow-lg backdrop-blur-sm border border-slate-200">
-        <button 
-          onClick={() => setUserRole("admin")}
-          className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${userRole === "admin" ? "bg-slate-900 text-white" : "text-slate-500 hover:text-slate-900"}`}
-        >
-          Admin
-        </button>
-        <button 
-          onClick={() => setUserRole("employee")}
-          className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${userRole === "employee" ? "bg-slate-900 text-white" : "text-slate-500 hover:text-slate-900"}`}
-        >
-          Ansatt
-        </button>
-      </div>
-
-      {userRole === "admin" ? <AdminDashboard /> : <EmployeeDashboard />}
-    </>
+      <AppContent />
+    </AuthProvider>
   );
+}
+
+/**
+ * AppContent Component
+ *
+ * Handles conditional rendering based on authentication state.
+ * Shows:
+ * - Loading spinner while checking auth state
+ * - LoginPage if user is not authenticated
+ * - Dashboard based on user role if authenticated
+ */
+function AppContent() {
+  const { user, loading } = useAuth();
+
+  // Show loading state while checking for persisted session
+  if (loading) {
+    return <LoadingScreen message="Laster PlenPilot..." />;
+  }
+
+  // Show login page if not authenticated
+  if (!user) {
+    return <LoginPage />;
+  }
+
+  // Show dashboard based on user role
+  if (user.role === "admin") {
+    return <AdminDashboard />;
+  }
+
+  if (user.role === "employee") {
+    return <EmployeeDashboard />;
+  }
+
+  // Fallback for unknown roles (should never happen with proper typing)
+  console.error(`Unknown user role: ${user.role}`);
+  return <LoginPage />;
 }

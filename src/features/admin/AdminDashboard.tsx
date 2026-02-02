@@ -6,6 +6,9 @@ import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
 
+// Import Auth
+import { useAuth } from "../auth";
+
 /* ── INTERFACES ── */
 interface NavItem {
   id: string;
@@ -128,6 +131,10 @@ const getServiceColor = (pct: number) => pct >= 100 ? "bg-red-600" : pct >= 80 ?
 const getServiceTextColor = (pct: number) => pct >= 100 ? "text-red-600" : pct >= 80 ? "text-amber-600" : "text-green-600";
 
 export function AdminDashboard() {
+  // Auth
+  const { user, logout } = useAuth();
+
+  // State
   const [activeTab, setActiveTab] = useState<string>("oversikt");
   const [stederFilter, setStederFilter] = useState<string>("alle");
   const [showNewSted, setShowNewSted] = useState<boolean>(false);
@@ -137,6 +144,7 @@ export function AdminDashboard() {
   const [addingServiceTo, setAddingServiceTo] = useState<number | null>(null);
   const [newServiceType, setNewServiceType] = useState<string>("");
   const [newServiceIntervall, setNewServiceIntervall] = useState<string>("");
+  const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
 
   const content = tabContent[activeTab] || tabContent.oversikt;
   const filteredSteder = stederFilter === "ferdig" ? stederData.filter((s) => s.status === "ferdig") : stederData;
@@ -175,16 +183,16 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-50 font-sans text-slate-900 antialiased pb-24 lg:pb-0">
       {/* HEADER */}
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-10">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-10">
           <div className="flex items-center gap-10">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-500 font-bold text-white shadow-lg">PP</div>
               <h1 className="text-xl font-bold tracking-tight text-slate-900">PlenPilot</h1>
             </div>
-            <nav className="hidden h-16 items-center gap-1 md:flex">
+            <nav className="hidden h-16 items-center gap-1 lg:flex">
               {navItems.map(n => (
                 <button
                   key={n.id}
@@ -198,7 +206,59 @@ export function AdminDashboard() {
               ))}
             </nav>
           </div>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 font-bold text-white shadow-md cursor-pointer hover:scale-105 transition-transform">KL</div>
+          {/* User Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 font-bold text-white shadow-md cursor-pointer hover:scale-105 transition-transform"
+              aria-label="Brukermeny"
+              aria-expanded={showUserMenu}
+            >
+              {user?.displayName?.slice(0, 2).toUpperCase() || "AD"}
+            </button>
+
+            {/* Dropdown Menu */}
+            {showUserMenu && (
+              <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white shadow-lg animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                {/* User Info */}
+                <div className="border-b border-slate-100 p-4">
+                  <p className="text-sm font-bold text-slate-900">
+                    {user?.displayName || "Admin"}
+                  </p>
+                  <p className="text-xs text-slate-500">{user?.email}</p>
+                  <Badge variant="info" dot={false} className="mt-2">
+                    {user?.role === "admin" ? "Administrator" : "Ansatt"}
+                  </Badge>
+                </div>
+
+                {/* Menu Items */}
+                <div className="p-2">
+                  <button
+                    onClick={async () => {
+                      setShowUserMenu(false);
+                      await logout();
+                    }}
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                  >
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    Logg ut
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -229,19 +289,19 @@ export function AdminDashboard() {
                 <Card
                   key={st.id}
                   hoverEffect
-                  className="flex items-center justify-between p-5 group hover:translate-x-1"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-4 sm:gap-0 group hover:translate-x-1"
                 >
-                  <div className="flex items-center gap-5">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <div className="flex items-center gap-4 sm:gap-5">
+                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white shrink-0">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sm:w-[22px] sm:h-[22px]"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                     </div>
                     <div>
-                      <div className="font-bold text-slate-900">{st.name}</div>
-                      <div className="text-sm text-slate-500 font-medium">{st.address}</div>
+                      <div className="font-bold text-slate-900 text-sm sm:text-base">{st.name}</div>
+                      <div className="text-xs sm:text-sm text-slate-500 font-medium">{st.address}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-10">
-                    <div className="text-right">
+                  <div className="flex items-center justify-between sm:justify-end gap-10 w-full sm:w-auto pl-[56px] sm:pl-0">
+                    <div className="text-left sm:text-right">
                       <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{st.type}</div>
                       <div className="text-sm font-bold text-slate-700">{st.dato}</div>
                     </div>
@@ -257,12 +317,12 @@ export function AdminDashboard() {
 
         {/* DEFAULT CARDS GRID */}
         {activeTab !== "steder" && activeTab !== "vedlikehold" && content.cards.length > 0 && (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {content.cards.map((c, i) => (
-              <Card key={i} hoverEffect className="p-7">
+              <Card key={i} hoverEffect className="p-4 sm:p-7">
                 <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{c.label}</div>
-                <div className="mt-4 text-4xl font-bold tracking-tight text-slate-900">{c.value}</div>
-                <div className="mt-5">
+                <div className="mt-2 sm:mt-4 text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">{c.value}</div>
+                <div className="mt-3 sm:mt-5">
                   <Badge variant={c.up === true ? "success" : c.up === false ? "danger" : "neutral"}>
                     {c.change}
                   </Badge>
@@ -285,37 +345,39 @@ export function AdminDashboard() {
                 const isExpanded = expandedKlipper === k.id;
                 return (
                   <div key={k.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all">
-                    <div className="flex cursor-pointer items-center justify-between px-8 py-6 hover:bg-slate-50" onClick={() => setExpandedKlipper(isExpanded ? null : k.id)}>
-                      <div className="flex items-center gap-5">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-500">
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="9" y1="3" x2="9" y2="21" /></svg>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-4 sm:px-8 sm:py-6 hover:bg-slate-50 cursor-pointer gap-4 sm:gap-0" onClick={() => setExpandedKlipper(isExpanded ? null : k.id)}>
+                      <div className="flex items-center gap-4 sm:gap-5">
+                        <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-500 shrink-0">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="9" y1="3" x2="9" y2="21" /></svg>
                         </div>
                         <div>
-                          <div className="font-bold text-slate-900">{k.navn}</div>
-                          <div className="text-sm text-slate-500 font-medium">{k.modell} • {k.services.length} servicer</div>
+                          <div className="font-bold text-slate-900 text-sm sm:text-base">{k.navn}</div>
+                          <div className="text-xs sm:text-sm text-slate-500 font-medium">{k.modell} • {k.services.length} servicer</div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-6">
-                        <div className="rounded-lg bg-slate-100 px-3 py-1 text-sm font-bold text-slate-600">{k.timer} t</div>
-                        <Badge variant={getKlipperStatusVariant(k)}>
-                          {getKlipperStatusText(k)}
-                        </Badge>
+                      <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 pl-[54px] sm:pl-0">
+                        <div className="flex items-center gap-3">
+                           <div className="rounded-lg bg-slate-100 px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm font-bold text-slate-600 whitespace-nowrap">{k.timer} t</div>
+                           <Badge variant={getKlipperStatusVariant(k)}>
+                             {getKlipperStatusText(k)}
+                           </Badge>
+                        </div>
                         <svg className={`text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9" /></svg>
                       </div>
                     </div>
 
                     {isExpanded && (
-                      <div className="border-t border-slate-100 bg-slate-50/50 p-8 pt-6">
+                      <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-8 sm:pt-6">
                         <div className="space-y-3">
                           {k.services.map(svc => {
                             const pct = Math.min((svc.timerSiden / svc.intervall) * 100, 100);
                             return (
-                              <Card key={svc.id} className="flex flex-wrap items-center gap-6 p-5">
-                                <div className="w-40 flex-shrink-0">
+                              <Card key={svc.id} className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 p-4 sm:p-5">
+                                <div className="w-full sm:w-40 flex-shrink-0 flex justify-between sm:block">
                                   <div className="text-sm font-bold text-slate-900">{svc.type}</div>
-                                  <div className="text-[10px] font-bold text-slate-400 mt-1 uppercase">Sist: {svc.sistUtført}</div>
+                                  <div className="text-[10px] font-bold text-slate-400 mt-0 sm:mt-1 uppercase">Sist: {svc.sistUtført}</div>
                                 </div>
-                                <div className="flex-1 min-w-[200px]">
+                                <div className="flex-1 w-full sm:min-w-[200px]">
                                   <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
                                     <div className={`h-full transition-all duration-700 ${getServiceColor(pct)}`} style={{ width: `${pct}%` }} />
                                   </div>
@@ -324,7 +386,7 @@ export function AdminDashboard() {
                                     <span className={getServiceTextColor(pct)}>{Math.round(pct)}%</span>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center justify-end gap-2 w-full sm:w-auto">
                                   <Button variant="success" size="icon" onClick={() => handleResetService(k.id, svc.id)}>
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                                   </Button>
@@ -338,11 +400,13 @@ export function AdminDashboard() {
                         </div>
 
                         {addingServiceTo === k.id ? (
-                          <div className="mt-4 flex gap-3 rounded-2xl bg-white p-6 border border-slate-200 animate-in fade-in slide-in-from-top-2 shadow-sm">
+                          <div className="mt-4 flex flex-col sm:flex-row gap-3 rounded-2xl bg-white p-4 sm:p-6 border border-slate-200 animate-in fade-in slide-in-from-top-2 shadow-sm">
                             <input className="flex-1 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all" placeholder="Hva skal gjøres?" value={newServiceType} onChange={e => setNewServiceType(e.target.value)} />
-                            <input className="w-28 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all" type="number" placeholder="Timer" value={newServiceIntervall} onChange={e => setNewServiceIntervall(e.target.value)} />
-                            <Button onClick={() => handleAddService(k.id)}>Lagre</Button>
-                            <Button variant="ghost" onClick={() => setAddingServiceTo(null)}>×</Button>
+                            <div className="flex gap-3">
+                              <input className="flex-1 sm:w-28 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all" type="number" placeholder="Timer" value={newServiceIntervall} onChange={e => setNewServiceIntervall(e.target.value)} />
+                              <Button onClick={() => handleAddService(k.id)} className="flex-1 sm:flex-none">Lagre</Button>
+                              <Button variant="ghost" onClick={() => setAddingServiceTo(null)}>×</Button>
+                            </div>
                           </div>
                         ) : (
                           <Button
@@ -371,7 +435,7 @@ export function AdminDashboard() {
       </main>
 
       {/* MOBILE NAV */}
-      <nav className="fixed bottom-0 z-50 flex w-full justify-around border-t border-slate-200 bg-white/80 p-3 pb-8 backdrop-blur-md md:hidden">
+      <nav className="fixed bottom-0 z-50 flex w-full justify-around border-t border-slate-200 bg-white/80 p-3 pb-8 backdrop-blur-md lg:hidden">
         {navItems.slice(0, 5).map(n => (
           <button key={n.id} onClick={() => setActiveTab(n.id)} className={`flex flex-col items-center gap-1 transition-all ${activeTab === n.id ? "text-blue-600" : "text-slate-400"}`}>
             <div className={`p-1.5 rounded-xl transition-all ${activeTab === n.id ? "bg-blue-50" : ""}`}>{n.icon}</div>
