@@ -4,7 +4,6 @@ import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import { useAuth } from "./useAuth";
-import { authService } from "./authService";
 
 /**
  * LoginPage Component
@@ -50,25 +49,22 @@ export function LoginPage() {
     }
   };
 
-  /**
-   * Handle quick login for development
-   * Bypasses form validation for rapid testing
-   */
   const handleQuickLogin = async (role: "admin" | "employee") => {
     // Clear any existing errors
     if (error) clearError();
 
+    const credentials = {
+      admin: { email: "admin@plen.no", password: "admin123" },
+      employee: { email: "ansatt@plen.no", password: "ansatt123" },
+    };
+
+    const { email, password } = credentials[role];
+
     try {
-      // Use quickLogin if available (development only)
-      if (authService.quickLogin) {
-        const user = await authService.quickLogin(role);
-        // Manually login with user credentials from mock data
-        const email = user.email;
-        const password = role === "admin" ? "admin123" : "ansatt123";
-        await login(email, password);
-      }
+      await login(email, password);
     } catch (err) {
       // Error handled by AuthProvider
+      console.error("Quick login failed:", err);
     }
   };
 
