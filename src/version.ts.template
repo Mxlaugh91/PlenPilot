@@ -1,0 +1,20 @@
+// Template for auto-generated version file
+// Kopier til src/version.ts for første build, eller kjør: npm run version:generate
+
+export const VERSION_INFO = {
+  version: '0.0.0-dev',
+  fullVersion: '0.0.0-dev+unknown',
+  baseVersion: '0.0.0',
+  buildNumber: 0,
+  commitHash: 'unknown',
+  branch: 'unknown',
+  isDirty: true,
+  buildDate: new Date().toISOString(),
+  buildTimestamp: Date.now()
+} as const;
+
+export const VERSION = VERSION_INFO.version;
+export const FULL_VERSION = VERSION_INFO.fullVersion;
+export const BUILD_NUMBER = VERSION_INFO.buildNumber;
+export const COMMIT_HASH = VERSION_INFO.commitHash;
+export const BUILD_DATE = VERSION_INFO.buildDate;
