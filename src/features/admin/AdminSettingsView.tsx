@@ -11,6 +11,14 @@ export function AdminSettingsView() {
 
     return (
         <div className="space-y-6 max-w-4xl">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900">Innstillinger</h1>
+                    <p className="text-sm text-gray-500 mt-1">Administrer systemet og dine preferanser</p>
+                </div>
+            </div>
+
             {/* General Settings */}
             <Card className="p-6">
                 <h3 className="text-lg font-bold text-slate-900 mb-4">Generelt</h3>

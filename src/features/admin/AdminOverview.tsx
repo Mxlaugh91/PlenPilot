@@ -12,18 +12,27 @@ const overviewStats: CardData[] = [
 
 export function AdminOverview() {
     return (
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {overviewStats.map((c, i) => (
-                <Card key={i} hoverEffect className="p-4 sm:p-7">
-                    <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{c.label}</div>
-                    <div className="mt-2 sm:mt-4 text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">{c.value}</div>
-                    <div className="mt-3 sm:mt-5">
-                        <Badge variant={c.up === true ? "success" : c.up === false ? "danger" : "neutral"}>
-                            {c.change}
-                        </Badge>
-                    </div>
-                </Card>
-            ))}
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900">Oversikt</h1>
+                    <p className="text-sm text-gray-500 mt-1">Hovedoversikt over bedriften</p>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {overviewStats.map((c, i) => (
+                    <Card key={i} hoverEffect className="p-4 sm:p-7">
+                        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{c.label}</div>
+                        <div className="mt-2 sm:mt-4 text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">{c.value}</div>
+                        <div className="mt-3 sm:mt-5">
+                            <Badge variant={c.up === true ? "success" : c.up === false ? "danger" : "neutral"}>
+                                {c.change}
+                            </Badge>
+                        </div>
+                    </Card>
+                ))}
+            </div>
         </div>
     );
 }

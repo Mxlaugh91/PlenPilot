@@ -4,6 +4,7 @@ import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
 import { NewLocationModal } from "./components/NewLocationModal";
 import type { Sted } from "./types";
+import { Plus } from "lucide-react";
 
 const stederData: Sted[] = [
     { id: 1, name: "Frognerparken", address: "Kirkeveien 21, Oslo", status: "ferdig", dato: "Man 3. feb", type: "Park" },
@@ -19,18 +20,26 @@ export function AdminLocationView() {
     const filteredSteder = stederFilter === "ferdig" ? stederData.filter((s) => s.status === "ferdig") : stederData;
 
     return (
-        <>
-            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900">Steder</h1>
+                    <p className="text-sm text-gray-500 mt-1">Lokasjoner og driftssteder</p>
+                </div>
+                <div className="flex gap-3 w-full sm:w-auto">
+                    <Button
+                        onClick={() => setShowNewSted(true)}
+                        icon={<Plus size={18} />}>
+                        Nytt sted
+                    </Button>
+                </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="inline-flex rounded-xl bg-slate-200 p-1">
                     <button onClick={() => setStederFilter("alle")} className={`rounded-lg px-5 py-1.5 text-sm font-bold transition-all ${stederFilter === "alle" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>Alle steder</button>
                     <button onClick={() => setStederFilter("ferdig")} className={`rounded-lg px-5 py-1.5 text-sm font-bold transition-all ${stederFilter === "ferdig" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>Fullført uke 5</button>
                 </div>
-                <Button
-                    onClick={() => setShowNewSted(true)}
-                    icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>}
-                >
-                    Nytt sted
-                </Button>
             </div>
             <div className="space-y-3">
                 {filteredSteder.map(st => (
@@ -65,6 +74,6 @@ export function AdminLocationView() {
                 isOpen={showNewSted}
                 onClose={() => setShowNewSted(false)}
             />
-        </>
+        </div>
     );
 }

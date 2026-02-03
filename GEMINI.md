@@ -53,4 +53,5 @@ Dette dokumentet vedlikeholdes av Gemini for å holde oversikt over prosjektstru
 ## 📝 Huskeliste for utviklere
 - **Nye features:** Skal legges i `src/features/[feature-navn]`. Om det er til Admin eller Til employee
 - **UI-komponenter:** Generiske ting (som knapper, inputs) skal i `src/components/ui`.
+**Ikoner:** Bruk `lucide-react` for ikoner. Se på `AdminEmployeeView.tsx` for et eksempel.
 - **Tilstand:** Prøv å hold state lokalt i featuren det gjelder, med mindre det må deles globalt.
