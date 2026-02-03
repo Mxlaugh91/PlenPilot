@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
+import { VERSION } from "../../version";
 
 export function AdminSettingsView() {
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -85,7 +86,7 @@ export function AdminSettingsView() {
             </Card>
 
             <div className="flex justify-end pt-4">
-                <p className="text-xs text-slate-400">PlenPilot v{import.meta.env.VITE_APP_VERSION || "1.0.0"}</p>
+                <p className="text-xs text-slate-400">PlenPilot {VERSION}</p>
             </div>
         </div>
     );
