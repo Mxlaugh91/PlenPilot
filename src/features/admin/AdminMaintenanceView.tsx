@@ -29,6 +29,7 @@ export function AdminMaintenanceView() {
     const [addingServiceTo, setAddingServiceTo] = useState<number | null>(null);
     const [newServiceType, setNewServiceType] = useState<string>("");
     const [newServiceIntervall, setNewServiceIntervall] = useState<string>("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_showNewKlipper, setShowNewKlipper] = useState<boolean>(false);
 
     const handleResetService = (klipperId: number, serviceId: number) => {

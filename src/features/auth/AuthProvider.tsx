@@ -1,5 +1,4 @@
 import {
-  createContext,
   useState,
   useEffect,
   useCallback,
@@ -20,7 +19,7 @@ const STORAGE_KEY = "plenpilot_user";
  * Provides authentication state and methods to all components in the app.
  * Use the `useAuth()` hook to access this context.
  */
-export const AuthContext = createContext<AuthContextValue | null>(null);
+import { AuthContext } from "./AuthContext";
 
 /**
  * Authentication Provider Props
