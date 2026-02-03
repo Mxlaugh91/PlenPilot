@@ -30,3 +30,9 @@ public/version.json
 
 # Agent memory
 .gemini
+
+# Documentation
+Documentation
+docs/
+
+
