@@ -8,7 +8,8 @@
  */
 
 // Components
-export { AuthProvider, AuthContext } from "./AuthProvider";
+export { AuthProvider } from "./AuthProvider";
+export { AuthContext } from "./AuthContext";
 
 // Hooks
 export { useAuth } from "./useAuth";

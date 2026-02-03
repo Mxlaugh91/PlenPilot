@@ -5,12 +5,13 @@
 
 // Dette vil genereres automatisk ved build
 // Hvis filen ikke eksisterer (før første build), håndterer vi det
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let VERSION_INFO: any;
 
 try {
   // Dynamisk import for å unngå build-feil før første versjonsgenerering
   VERSION_INFO = await import('../version').then(m => m.VERSION_INFO);
-} catch (error) {
+} catch {
   // Før første build - bruk placeholder
   VERSION_INFO = {
     version: '0.0.0-dev',

@@ -43,7 +43,7 @@ export function LoginPage() {
 
     try {
       await login(email, password);
-    } catch (err) {
+    } catch {
       // Error is handled by AuthProvider and stored in context
       // Component will re-render with error state
     }
