@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import type { Employee } from "./types";
-import { Download, Plus, Search, MoreVertical } from "lucide-react";
+import { Download, Plus } from "lucide-react";
 
 export function AdminEmployeeView() {
     const [searchQuery, setSearchQuery] = useState('');
