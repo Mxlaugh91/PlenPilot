@@ -32,7 +32,7 @@ const navItems: NavItem[] = [
 const getTabTitle = (tab: string) => {
   switch (tab) {
     case "oversikt": return { title: "Oversikt", subtitle: "Hovedoversikt over bedriften" };
-    case "ansatte": return { title: "Ansatte", subtitle: "Administrer ansatte og tilganger" };
+    case "ansatte": return { title: undefined, subtitle: undefined };
     case "steder": return { title: "Steder", subtitle: "Lokasjoner og driftssteder" };
     case "vedlikehold": return { title: "Vedlikehold", subtitle: "Planlegging og oppfølging" };
     case "arkiv": return { title: "Arkiv", subtitle: "Dokumenter og historikk" };

@@ -18,7 +18,7 @@ interface DashboardLayoutProps {
     setActiveTab: (id: string) => void;
     user: User | null;
     logout: () => Promise<void>;
-    title: string;
+    title?: string;
     subtitle?: string;
 }
 
@@ -85,10 +85,12 @@ export function DashboardLayout({
                 {/* MAIN CONTENT */}
                 <main className="flex-1 overflow-y-auto px-4 py-8 lg:p-10 pb-24 lg:pb-10">
                     <div className="w-full">
-                        <div className="mb-8">
-                            <h2 className="text-3xl font-bold tracking-tight text-slate-900">{title}</h2>
-                            {subtitle && <p className="mt-1 text-slate-500">{subtitle}</p>}
-                        </div>
+                        {title && (
+                            <div className="mb-8">
+                                <h2 className="text-3xl font-bold tracking-tight text-slate-900">{title}</h2>
+                                {subtitle && <p className="mt-1 text-slate-500">{subtitle}</p>}
+                            </div>
+                        )}
                         {children}
                     </div>
                 </main>

@@ -45,3 +45,14 @@ export interface Klipper {
     timer: number;
     services: Service[];
 }
+
+export interface Employee {
+    id: string;
+    name: string;
+    email: string;
+    role: 'Admin' | 'Bruker';
+    department: string;
+    status: 'Aktiv' | 'Inaktiv';
+    lastActive: string;
+    avatar?: string;
+}
